@@ -47,8 +47,6 @@ public class Teacher extends User implements Serializable {
 
     @Override
     public String toString() {
-        return "Teacher{" +
-                "post='" + post + '\'' +
-                "} " + super.toString();
+        return super.toString() + " post='" + post + '\'';
     }
 }

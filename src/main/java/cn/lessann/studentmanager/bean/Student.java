@@ -58,9 +58,6 @@ public class Student extends User implements Serializable {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "grade='" + grade + '\'' +
-                ", rank=" + rank +
-                "} " + super.toString();
+        return super.toString() + " grade='" + grade + '\'' + ", rank='" + rank + '\'';
     }
 }

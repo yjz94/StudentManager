@@ -9,7 +9,6 @@ package cn.lessann.studentmanager.exception;
  */
 public class FileDbPathNotFindException extends Exception {
     private static final long serialVersionUID = -6541809848875446182L;
-
     public FileDbPathNotFindException(String message) {
         super(message);
     }

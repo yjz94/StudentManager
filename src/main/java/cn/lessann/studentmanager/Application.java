@@ -1,8 +1,10 @@
 package cn.lessann.studentmanager;
 
 import cn.lessann.studentmanager.bean.Student;
-import cn.lessann.studentmanager.function.FileDb;
+import cn.lessann.studentmanager.function.StudentFileDb;
 import cn.lessann.studentmanager.util.Util;
+
+import java.util.*;
 
 /**
  * 程序启动类
@@ -16,17 +18,42 @@ import cn.lessann.studentmanager.util.Util;
 public class Application {
 
     public static void main(String[] args) {
-        Student student = new Student();
-        student.setName("张三");
-        student.setSex("男");
-        student.setAge(18);
-        student.setGrade("一年级二班");
-        student.setRank(1);
+        Application application = new Application();
 
-        FileDb<Student> fileDb = new FileDb<>(new Student());
+        StudentFileDb studentFileDb = new StudentFileDb(new Student());
 
-        fileDb.add(student);
+        while (true) {
+            int i = application.showFunction();
+            switch (i) {
+                case 1:
+                    studentFileDb.addStudent();
+                    break;
+                case 2:
+                    studentFileDb.deleteStudent();
+                    break;
+                case 3:
+                    studentFileDb.updateStudent();
+                    break;
+                case 4:
+                    studentFileDb.showAllStudent();
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("选择错误，程序即将停止");
+                    return;
+            }
+        }
+    }
 
+    public int showFunction() {
+        System.out.println("请选择操作内容：");
+        List<String> list = Arrays.asList("1.新增学生", "2.删除学生", "3.修改学生", "4.显示学生", "5.退出");
+        for (String s : list) {
+            System.out.println(s);
+        }
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
     }
 
 }

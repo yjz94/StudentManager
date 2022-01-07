@@ -1,9 +1,9 @@
 package cn.lessann.studentmanager.function;
 
 import cn.lessann.studentmanager.exception.FileDbPathNotFindException;
+import cn.lessann.studentmanager.util.Util;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Objects;
  * @version 1.0
  * @date 2022/1/6 8:32 下午
  */
-public class FileDb<T> {
+public abstract class FileDb<T> {
 
     private T t;
 
@@ -111,12 +111,18 @@ public class FileDb<T> {
 
         List<T> list = getAll();
 
-        for (T item : list) {
-            String itemPrimaryKey = getPrimaryKey(item);
-
+        int flag = -1;
+        for (int i = 0; i < list.size(); i++) {
+            String itemPrimaryKey = getPrimaryKey(list.get(i));
             if (itemPrimaryKey.equals(primaryKey)) {
-                item = newBean;
+                flag = i;
+                break;
             }
+        }
+
+        if (flag != -1) {
+            list.remove(flag);
+            list.add(flag, newBean);
         }
 
         writerFileDb(list);
@@ -126,14 +132,15 @@ public class FileDb<T> {
 
     private boolean isExists(List<T> list, T bean) {
         try {
-            Class<?> clazz = t.getClass();
-            Field field = clazz.getDeclaredField("name");
-            field.setAccessible(true);
-            String name = (String) field.get(bean);
+            // 获得被操作对象类对象
+            Class<?> clazz = bean.getClass();
+
+            // 获得name属性值，开启了访问权限
+            String name = (String) Util.getFieldValue(bean.getClass(), bean, "name");
 
             for (T item : list) {
                 // 此处我们设置name为类主键，判断文件中是否已存在就使用此字段
-                String tempName = (String) field.get(item);
+                String tempName = (String) Util.getFieldValue(item.getClass(), item, "name");
                 if (name.equals(tempName)) {
                     return true;
                 }
@@ -170,11 +177,7 @@ public class FileDb<T> {
             if (bean == null) {
                 return null;
             }
-            // 获得类对象
-            Class clazz = bean.getClass();
-            Field field = clazz.getDeclaredField("name");
-            field.setAccessible(true);
-            return (String) field.get(bean);
+            return (String) Util.getFieldValue(bean.getClass(), bean, "name");
         } catch (Exception e) {
             e.printStackTrace();
         }
