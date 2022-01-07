@@ -2,9 +2,10 @@ package cn.lessann.studentmanager;
 
 import cn.lessann.studentmanager.bean.Student;
 import cn.lessann.studentmanager.function.StudentFileDb;
-import cn.lessann.studentmanager.util.Util;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * 程序启动类
